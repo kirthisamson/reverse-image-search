@@ -1,0 +1,40 @@
+
+<p id="notice"><%= notice %></p>
+<div style="padding:50px">
+	
+
+<p class="lead"> 
+  <strong>Name:</strong>
+  <%= @image.name %>
+</p>
+
+<!-- <p>
+  <strong>Signature:</strong>
+  <%= @image.signature %>
+</p> -->
+
+<p>
+  <strong>Discription:</strong>
+  <%= @image.disc %>
+</p>
+
+<p>
+  <strong>Artist:</strong>
+  <%= @image.artist %>
+</p>
+<p>
+  <strong>Historical Context:</strong>
+  <%= @image.historical_context %>
+</p>
+<p>
+  <strong>Medium:</strong>
+  <%= @image.medium %>
+</p>
+<p>
+  <strong>Dimensions:</strong>
+  <%= @image.dimensions %>
+</p>
+
+<%= link_to 'Edit', edit_image_path(@image) %> |
+<%= link_to 'Back', images_path %>
+</div>

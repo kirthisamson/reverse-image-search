@@ -1,0 +1,168 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Images</h1>
+
+<label>Image File:</label><br/>
+<input type="file" id="imageLoader" name="imageLoader"/>
+<canvas id="imageCanvas"></canvas>
+
+<p id='signature'><p>
+<button id='search'> Search </button>
+<p id="id_message"><p>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Signature</th>
+      <th>Disc</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+
+    <% @images.each do |image| %>
+      <tr>
+        <td><%= image.name %></td>
+        <td><%= image.signature %></td>
+        <td><%= image.disc %></td>
+        <td><%= link_to 'Show', image %></td>
+        <td><%= link_to 'Edit', edit_image_path(image) %></td>
+        <td><%= link_to 'Destroy', image, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Image', new_image_path %>
+
+
+<script>
+var imageLoader = document.getElementById('imageLoader');
+    imageLoader.addEventListener('change', handleImage, false);
+var canvas = document.getElementById('imageCanvas');
+var ctx = canvas.getContext('2d');
+
+var width = 0;
+var height = 0;
+
+function handleImage(e){
+    var reader = new FileReader();
+    reader.onload = function(event){
+        var img = new Image();
+        img.onload = function(){
+            canvas.width = img.width;
+            width = img.width;
+            console.log(img.width);
+            console.log(width);
+            canvas.height = img.height;
+            height = img.height;
+            ctx.drawImage(img,0,0);
+            calculatePoints(height, width);
+        }
+        img.src = event.target.result;
+    }
+    reader.readAsDataURL(e.target.files[0]); 
+        
+}
+
+function calculatePoints(height, width){
+  alert("height and width are : " + height +" , "+ width);
+  var canvas = document.getElementById('imageCanvas');
+  var ctx = canvas.getContext('2d');
+
+  var canWidth = canvas.width;
+  var canHeight = canvas.height;
+
+  var splitWidth = canWidth/8;
+  var splitHeight = canHeight/8;
+
+console.log(canWidth + " , " +  canHeight +" , "+ splitWidth + " , "+ splitHeight);
+
+  var signature = "color";
+for (var rows = splitHeight; rows<canHeight; rows+=splitHeight)
+{
+  for (var cols = splitWidth; cols<canWidth; cols+=splitWidth)
+  {
+    console.log(rows +" , " + cols);
+    var pixel = ctx.getImageData(rows, cols, 1, 1);
+  var pix = pixel.data;
+
+  var i=0;
+// Loop over each pixel and invert the color.
+//for (var i = 0, n = pix.length; i < n; i += 4) {
+  console.log(pix[i  ]);// red
+  console.log(pix[i+1  ]);// green
+  console.log(pix[i+2  ]);// blue
+
+  signature += pix[i]+''+pix[i+1]+''+pix[i+2];
+  }
+}
+//adding
+//color317325302326304305348325576455210475365314305441360213189224341292253235195188186352292192193183180188332292180180180187136303292292191175114295292
+
+//not adding
+//color8883146928414982771439581150877614186791401048915592841491881782101471251835450106165116194116911589380141837814414012317811096154555110749439766541041118414676771397163119645811348461015043955545861178714876771394745100484510046439448419160507810484144767713946409447429149419059497946405086791387677139767713961517957496936354378781397677139
+
+//color8883146928414982771439581150877614186791401048915592841491881782101471251835450106165116194116911589380141837814414012317811096154555110749439766541041118414676771397163119645811348461015043955545861178714876771394745100484510046439448419160507810484144767713946409447429149419059497946405086791387677139767713961517957496936354378781397677139
+
+
+console.log(signature);
+$('#signature').val(signature);
+  // Get the CanvasPixelArray from the given coordinates and dimensions.
+  //var imgd = ctx.getImageData(height/2, width/2 , width, height);
+  var pixel = ctx.getImageData(canvas.height/4, canvas.width/4, 1, 1);
+  var pix = pixel.data;
+
+  var i=0;
+// Loop over each pixel and invert the color.
+//for (var i = 0, n = pix.length; i < n; i += 4) {
+  console.log(pix[i  ]);// red
+  console.log(pix[i+1  ]);// green
+  console.log(pix[i+2  ]);// blue
+  //pix[i+1] = 255 - pix[i+1]; 
+  //pix[i+2] = 255 - pix[i+2]; 
+  // i+3 is alpha (the fourth element)
+//}
+
+}
+
+
+$( "#search" ).click(function() {
+  alert( "Handler for .click() called." );
+  var sig = $('#signature').val()
+  window.location.href = "/images/show?signature="+sig;
+});
+
+
+
+// $('#apply').on('click', function(event, data, status, xhr) {
+//   alert("search");
+//   var sig = $('#signature').val()
+//     event.preventDefault();
+//     return $.ajax({
+//       url: '/images/',
+//       type: 'GET',
+//       data: {
+//         code: $('#signature').val()
+//       },
+//       success: function(data, event, status, xhr) {
+//         $('#id_message').html(response);
+//         return $("#id_message").show();
+//       },
+//       error: function(event, data, status, xhr) {
+//         $('#id_message').html(response);
+//         return $("#id_message").show();
+//       }
+//     });
+//   });
+
+
+
+
+</script>
